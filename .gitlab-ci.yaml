@@ -1,0 +1,36 @@
+stages:
+- build
+- deploy-prod
+
+build:
+  image: docker:20.10.16-dind
+  stage: build
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_TOKEN $CI_REGISTRY
+    - docker build --compress -t $CI_REGISTRY/sitronics/backend/chat:$CI_COMMIT_SHORT_SHA .
+    - docker tag $CI_REGISTRY/sitronics/backend/chat:$CI_COMMIT_SHORT_SHA $CI_REGISTRY/sitronics/backend/chat:latest
+    - docker push $CI_REGISTRY/sitronics/backend/chat:latest
+    - docker push $CI_REGISTRY/sitronics/backend/chat:$CI_COMMIT_SHORT_SHA
+  only:
+    - main
+deploy-prod:
+  stage: deploy-prod
+  image: alpine:3.8
+  before_script:
+    - apk add --no-cache git curl bash coreutils
+    - curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh"  | bash
+    - mv kustomize /usr/local/bin/
+    - git config --global user.email "gitlab@e-bus.site"
+    - git config --global user.name "GitLab CI/CD"
+  script:
+    - git clone https://${CI_INFRA_USER}:${CI_INFRA_TOKEN}@gitlab.hyneo.ru/sitronics/infra.git
+    - cd infra/chat/prod
+    - kustomize edit set image registry.hyneo.ru/sitronics/backend/chat:$CI_COMMIT_SHORT_SHA
+    - cat kustomization.yaml
+    - git add .
+    - git commit -am 'chat PROD manifest-image update'
+    - git push origin main
+  dependencies:
+    - build
+  only:
+    - main

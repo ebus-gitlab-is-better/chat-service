@@ -3,6 +3,7 @@ module chat-service
 go 1.18
 
 require (
+	github.com/Nerzal/gocloak/v13 v13.8.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-kratos/kratos/v2 v2.7.0
 	github.com/google/wire v0.5.0
@@ -13,7 +14,6 @@ require (
 )
 
 require (
-	github.com/Nerzal/gocloak/v13 v13.8.0 // indirect
 	github.com/bytedance/sonic v1.10.2 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20230717121745-296ad89f973d // indirect
 	github.com/chenzhuoyu/iasm v0.9.1 // indirect
