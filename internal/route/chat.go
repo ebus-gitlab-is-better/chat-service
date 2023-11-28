@@ -95,7 +95,8 @@ func (r *ChatRoute) CreateMessage(c *gin.Context) {
 		ChatID:     chat.ID,
 		Message:    dto.Message,
 		SenderID:   *userKeycloak.Sub,
-		SenderName: *userKeycloak.Nickname,
+		SenderName: "Test",
+		// SenderName: *userKeycloak.Nickname,
 		// SenderName: *userKeycloak.FamilyName + " " + *userKeycloak.GivenName + " " + *userKeycloak.MiddleName,
 		SentAt: time.Now(),
 	}, "dialog#"+chat.UserID+","+chat.ReceiverID)
