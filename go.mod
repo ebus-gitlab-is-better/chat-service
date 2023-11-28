@@ -2,8 +2,6 @@ module chat-service
 
 go 1.21
 
-toolchain go1.21.3
-
 require (
 	github.com/Nerzal/gocloak/v13 v13.8.0
 	github.com/gin-gonic/gin v1.9.1
