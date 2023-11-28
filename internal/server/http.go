@@ -101,7 +101,6 @@ func NewHTTPServer(c *conf.Server, uc *biz.ChatUseCase, api *data.KeycloakAPI, l
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	r := gin.Default()
-	r.Use(AuthMiddleware(api))
 	config := cors.DefaultConfig()
 	config.AllowOrigins = []string{"*"}
 	config.AllowMethods = []string{"POST", "OPTIONS", "GET", "PUT", "DELETE"}
@@ -110,7 +109,9 @@ func NewHTTPServer(c *conf.Server, uc *biz.ChatUseCase, api *data.KeycloakAPI, l
 	r.Use(cors.New(config))
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	route := route.NewChatRoute(uc)
-	route.Register(r)
+	chatsRoute := r.Group("/chats")
+	chatsRoute.Use(AuthMiddleware(api))
+	route.Register(chatsRoute)
 	srv := http.NewServer(opts...)
 
 	srv.HandlePrefix("/", r)

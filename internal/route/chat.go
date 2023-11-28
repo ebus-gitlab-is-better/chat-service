@@ -19,10 +19,10 @@ func NewChatRoute(uc *biz.ChatUseCase) *ChatRoute {
 	return &ChatRoute{uc: uc}
 }
 
-func (r *ChatRoute) Register(router *gin.Engine) {
-	router.GET("/chats/:id/history", r.GetHistory)
-	router.POST("/chats/", r.CreateChat)
-	router.GET("/chats", r.GetChats)
+func (r *ChatRoute) Register(router *gin.RouterGroup) {
+	router.GET("/:id/history", r.GetHistory)
+	router.POST("/", r.CreateChat)
+	router.GET("/", r.GetChats)
 	// router.DELETE("/chats/:id", )
 }
 
