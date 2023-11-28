@@ -30,7 +30,12 @@ type Message struct {
 
 func (m Message) modelToResponse() *biz.Message {
 	return &biz.Message{
-		ID: m.ID,
+		ID:         m.ID,
+		ChatID:     m.ChatID,
+		Message:    m.Message,
+		SenderID:   m.SenderID,
+		SenderName: m.SenderName,
+		SentAt:     m.SentAt,
 	}
 }
 
