@@ -14,8 +14,8 @@ data:
     port: ${DB_PORT}
   keycloak:
     hostname: ${KC_HOST}
-    clientID: ${KC_CLIENT}
-    clientSecret: ${KC_SECRET}
+    client_id: ${KC_CLIENT}
+    client_secret: ${KC_SECRET}
     realm: ${KC_REALM}
   redis:
     addr: 127.0.0.1:6379

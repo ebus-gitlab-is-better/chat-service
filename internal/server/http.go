@@ -4,6 +4,7 @@ import (
 	"chat-service/internal/biz"
 	"chat-service/internal/conf"
 	"chat-service/internal/data"
+	"fmt"
 	http1 "net/http"
 	"strings"
 
@@ -34,7 +35,8 @@ func AuthMiddleware(api *data.KeycloakAPI) gin.HandlerFunc {
 		accessToken := authParts[1]
 
 		rptResult, err := api.CheckToken(accessToken)
-
+		fmt.Println(rptResult)
+		fmt.Println(err)
 		if err != nil {
 			c.JSON(http1.StatusUnauthorized, &gin.H{
 				"error": err.Error(),
@@ -50,16 +52,16 @@ func AuthMiddleware(api *data.KeycloakAPI) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		// user, err := api.GetUserInfo(accessToken)
+		user, err := api.GetUserInfo(accessToken)
 
-		// if err != nil {
-		// 	c.JSON(http1.StatusUnauthorized, &gin.H{
-		// 		"error": err.Error(),
-		// 	})
-		// 	c.Abort()
-		// 	return
-		// }
-		// c.Set("user", user)
+		if err != nil {
+			c.JSON(http1.StatusUnauthorized, &gin.H{
+				"error": err.Error(),
+			})
+			c.Abort()
+			return
+		}
+		c.Set("user", user)
 		c.Next()
 	}
 }
