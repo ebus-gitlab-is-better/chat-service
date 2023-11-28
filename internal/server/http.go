@@ -4,6 +4,7 @@ import (
 	"chat-service/internal/biz"
 	"chat-service/internal/conf"
 	"chat-service/internal/data"
+	"chat-service/internal/route"
 	slog "log"
 	http1 "net/http"
 	"strings"
@@ -84,8 +85,10 @@ func NewHTTPServer(c *conf.Server, uc *biz.ChatUseCase, api *data.KeycloakAPI, l
 	}
 	r := gin.Default()
 	r.Use(AuthMiddleware(api))
-
+	route := route.NewChatRoute(uc)
+	route.Register(r)
 	srv := http.NewServer(opts...)
+
 	srv.HandlePrefix("/", r)
 	return srv
 }
