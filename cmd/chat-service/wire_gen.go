@@ -34,7 +34,7 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	chatService := service.NewChatService(chatUseCase)
 	grpcServer := server.NewGRPCServer(confServer, chatService, logger)
 	goCloak := data.NewKeycloak(confData)
-	keycloakAPI := data.NewKeyCloakAPI(confData, goCloak)
+	keycloakAPI := data.NewKeyCloakAPI(confData, goCloak, logger)
 	httpServer := server.NewHTTPServer(confServer, chatUseCase, keycloakAPI, logger)
 	app := newApp(logger, grpcServer, httpServer)
 	return app, func() {
