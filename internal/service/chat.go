@@ -4,7 +4,7 @@ import (
 	proxyproto "chat-service/api/centrifugo"
 	"chat-service/internal/biz"
 	"context"
-	"fmt"
+	slog "log"
 )
 
 type ChatService struct {
@@ -16,7 +16,7 @@ func NewChatService(uc *biz.ChatUseCase) *ChatService {
 	return &ChatService{uc: uc}
 }
 func (s *ChatService) Publish(ctx context.Context, req *proxyproto.PublishRequest) (*proxyproto.PublishResponse, error) {
-	fmt.Print(req)
+	slog.Println(req)
 	// parts := strings.Split(strings.TrimPrefix(req.Channel, "dialog#"), ",")
 	// if len(parts) != 2 {
 	// 	return nil, errors.New("ERROR_PUBLISH")
