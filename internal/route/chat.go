@@ -35,13 +35,13 @@ type CreateChatDTO struct {
 // @Accept		json
 // @Produce	json
 // @Tags		chat
-// @Param		dto	body	router.CreateChatDTO	true	"dto"
+// @Param		dto	body	route.CreateChatDTO	true	"dto"
 // @Success	200
 // @Failure	401
 // @Failure	403
-// @Failure	500	{object}
-// @Failure	400	{object}
-// @Failure	404	{object}
+// @Failure	500
+// @Failure	400
+// @Failure	404
 // @Router		/chats/ [post]
 func (r *ChatRoute) CreateChat(c *gin.Context) {
 	body, err := io.ReadAll(c.Request.Body)
@@ -86,13 +86,13 @@ type ChatDTO struct {
 // @Tags		chat
 // @Param		id	path	int	true	"Chat ID"	Format(uint64)
 //
-//	@Success	200	{object}	router.ChatDTO
+//	@Success	200	{object}	route.ChatDTO
 //
 // @Failure	401
 // @Failure	403
-// @Failure	500	{object}
-// @Failure	400	{object}
-// @Failure	404	{object}
+// @Failure	500
+// @Failure	400
+// @Failure	404
 // @Router		/chats/ [get]
 func (r *ChatRoute) GetChats(c *gin.Context) {
 	user, ok := c.Get("user")
@@ -130,13 +130,13 @@ type ChatsDTO struct {
 //
 //	@Param		page			query	int		false	"offset"	Format(uint64)
 //
-//	@Success	200	{object}	object.ListDTO
+//	@Success	200	{object}	route.MessageDTO
 //
 // @Failure	401
 // @Failure	403
-// @Failure	500	{object}
-// @Failure	400	{object}
-// @Failure	404	{object}
+// @Failure	500
+// @Failure	400
+// @Failure	404
 // @Router		/chats/ [get]
 func (r *ChatRoute) GetHistory(c *gin.Context) {
 	id := c.Param("id")
