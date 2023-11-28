@@ -5,21 +5,26 @@ import (
 	"context"
 
 	"github.com/Nerzal/gocloak/v13"
+	"github.com/go-kratos/kratos/v2/log"
 )
 
 type KeycloakAPI struct {
 	conf   *conf.Data
 	client *gocloak.GoCloak
+	logger *log.Helper
 }
 
-func NewKeyCloakAPI(conf *conf.Data, client *gocloak.GoCloak) *KeycloakAPI {
+func NewKeyCloakAPI(conf *conf.Data, client *gocloak.GoCloak, logger log.Logger) *KeycloakAPI {
 	return &KeycloakAPI{
 		conf:   conf,
 		client: client,
+		logger: log.NewHelper(logger),
 	}
 }
 
 func (api *KeycloakAPI) CheckToken(accessToken string) (*gocloak.IntroSpectTokenResult, error) {
+	api.logger.Info(api.conf.Keycloak.ClientId)
+	api.logger.Info(api.conf.Keycloak.ClientSecret)
 	return api.client.RetrospectToken(
 		context.TODO(),
 		accessToken,
