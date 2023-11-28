@@ -3,9 +3,11 @@ package data
 import (
 	"chat-service/internal/biz"
 	"context"
+	"encoding/json"
 	"errors"
 	"time"
 
+	gocent "github.com/centrifugal/gocent/v3"
 	"github.com/go-kratos/kratos/v2/log"
 	"gorm.io/gorm"
 )
@@ -35,14 +37,15 @@ func (m Message) modelToResponse() *biz.Message {
 type chatRepo struct {
 	data   *Data
 	logger *log.Helper
+	cent   *gocent.Client
 }
 
-func NewChatRepo(data *Data, logger log.Logger) biz.ChatRepo {
-	return &chatRepo{data: data, logger: log.NewHelper(logger)}
+func NewChatRepo(data *Data, logger log.Logger, cent *gocent.Client) biz.ChatRepo {
+	return &chatRepo{data: data, logger: log.NewHelper(logger), cent: cent}
 }
 
 // Create implements biz.ChatRepo.
-func (r *chatRepo) CreateMessage(_ context.Context, msg *biz.Message) error {
+func (r *chatRepo) CreateMessage(_ context.Context, msg *biz.Message, channel string) error {
 	msgDB := Message{}
 	msgDB.SenderID = msg.SenderID
 	msgDB.SentAt = time.Now()
@@ -50,6 +53,11 @@ func (r *chatRepo) CreateMessage(_ context.Context, msg *biz.Message) error {
 	msgDB.ChatID = msg.ChatID
 	msgDB.Message = msg.Message
 	if err := r.data.db.Create(&msgDB).Error; err != nil {
+		return err
+	}
+	data, _ := json.Marshal(msg)
+	_, err := r.cent.Publish(context.TODO(), channel, data)
+	if err != nil {
 		return err
 	}
 	return nil
@@ -136,7 +144,21 @@ func (r *chatRepo) GetChat(_ context.Context, userID string, receieverID string)
 		return nil, err
 	}
 	return &biz.Chat{
-		UserID:     userID,
-		ReceiverID: receieverID,
+		UserID:     channelsDB.UserID,
+		ReceiverID: channelsDB.ReceiverID,
+	}, nil
+}
+
+// GetChatById implements biz.ChatRepo.
+func (r *chatRepo) GetChatById(_ context.Context, id uint) (*biz.Chat, error) {
+	var channelsDB Chat
+	if err := r.data.db.
+		Where(&Chat{ID: id}).
+		Find(&channelsDB).Error; err != nil {
+		return nil, err
+	}
+	return &biz.Chat{
+		UserID:     channelsDB.UserID,
+		ReceiverID: channelsDB.ReceiverID,
 	}, nil
 }

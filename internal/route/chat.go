@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"io"
 	"strconv"
+	"time"
 
 	"github.com/Nerzal/gocloak/v13"
 	"github.com/gin-gonic/gin"
@@ -23,7 +24,87 @@ func (r *ChatRoute) Register(router *gin.RouterGroup) {
 	router.GET("/:id/history", r.GetHistory)
 	router.POST("/", r.CreateChat)
 	router.GET("/", r.GetChats)
+	router.POST("/:id/")
 	// router.DELETE("/chats/:id", )
+}
+
+type MessageCreateDTO struct {
+	Message string `json:"message"`
+}
+
+// @Summary	Create message
+// @Accept		json
+// @Produce	json
+// @Tags		chat
+// @Param		id	path	int	true	"Chat ID"	Format(uint64)
+// @Param		dto	body	route.MessageCreateDTO	true	"dto"
+// @Success	200
+// @Failure	401
+// @Failure	403
+// @Failure	500
+// @Failure	400
+// @Failure	404
+// @Router		/chats/{id}/ [post]
+func (r *ChatRoute) CreateMessage(c *gin.Context) {
+	id := c.Param("id")
+	idUint, err := strconv.Atoi(id)
+
+	if err != nil {
+		c.AbortWithStatusJSON(400, gin.H{
+			"error": "parse id error",
+		})
+		return
+	}
+
+	body, err := io.ReadAll(c.Request.Body)
+
+	if err != nil {
+		c.JSON(400, &gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	dto := MessageCreateDTO{}
+
+	err = json.Unmarshal(body, &dto)
+	if err != nil {
+		c.AbortWithStatusJSON(400, &gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	user, ok := c.Get("user")
+	if !ok {
+		c.Status(400)
+		return
+	}
+	userKeycloak, ok := user.(*gocloak.UserInfo)
+	if !ok {
+		c.Status(400)
+		return
+	}
+	chat, err := r.uc.GetChatById(context.TODO(), uint(idUint))
+	if err != nil {
+		c.JSON(500, &gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
+	err = r.uc.CreateMessage(context.TODO(), &biz.Message{
+		ChatID:     chat.ID,
+		Message:    dto.Message,
+		SenderID:   *userKeycloak.Sub,
+		SenderName: *userKeycloak.FamilyName + " " + *userKeycloak.GivenName + " " + *userKeycloak.MiddleName,
+		SentAt:     time.Now(),
+	}, "dialog#"+chat.UserID+","+chat.ReceiverID)
+	if err != nil {
+		c.JSON(500, &gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	c.Status(200)
 }
 
 type CreateChatDTO struct {
@@ -44,6 +125,7 @@ type CreateChatDTO struct {
 // @Failure	404
 // @Router		/chats/ [post]
 func (r *ChatRoute) CreateChat(c *gin.Context) {
+
 	body, err := io.ReadAll(c.Request.Body)
 
 	if err != nil {

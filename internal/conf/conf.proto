@@ -48,4 +48,6 @@ message Data {
   Database database = 1;
   Redis redis = 2;
   KeyCloak keycloak = 3;
+  string api_key = 4;
+  string address_message = 5;
 }

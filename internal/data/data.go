@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/Nerzal/gocloak/v13"
+	gocent "github.com/centrifugal/gocent/v3"
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/google/wire"
 	"gorm.io/driver/postgres"
@@ -19,7 +20,7 @@ import (
 )
 
 // ProviderSet is data providers.
-var ProviderSet = wire.NewSet(NewData, NewChatRepo, NewDB, NewKeycloak, NewKeyCloakAPI)
+var ProviderSet = wire.NewSet(NewData, NewChatRepo, NewDB, NewKeycloak, NewKeyCloakAPI, NewCent)
 
 // Data структура для работы с базой данных
 type Data struct {
@@ -89,4 +90,12 @@ func NewDB(c *conf.Data) *gorm.DB {
 		panic("failed to connect database")
 	}
 	return db
+}
+
+func NewCent(conf *conf.Data) *gocent.Client {
+	c := gocent.New(gocent.Config{
+		Addr: conf.AddressMessage,
+		Key:  conf.ApiKey,
+	})
+	return c
 }

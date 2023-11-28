@@ -22,10 +22,11 @@ type Chat struct {
 }
 
 type ChatRepo interface {
-	CreateMessage(context.Context, *Message) error
+	CreateMessage(context.Context, *Message, string) error
 	GetChatHistory(context.Context, uint, uint) ([]*Message, error)
 	CreateChat(context.Context, string, string) error
 	GetChat(context.Context, string, string) (*Chat, error)
+	GetChatById(context.Context, uint) (*Chat, error)
 	DeleteChat(context.Context, uint) error
 	GetListChat(context.Context, string) ([]*Chat, error)
 }
@@ -40,8 +41,8 @@ func NewChatUseCase(repo ChatRepo) *ChatUseCase {
 	}
 }
 
-func (uc *ChatUseCase) CreateMessage(ctx context.Context, msg *Message) error {
-	return uc.repo.CreateMessage(ctx, msg)
+func (uc *ChatUseCase) CreateMessage(ctx context.Context, msg *Message, channel string) error {
+	return uc.repo.CreateMessage(ctx, msg, channel)
 }
 
 func (uc *ChatUseCase) GetChatHistory(ctx context.Context, chatId, offset uint) ([]*Message, error) {
@@ -62,4 +63,8 @@ func (uc *ChatUseCase) DeleteChat(ctx context.Context, name string, userID uint)
 
 func (uc *ChatUseCase) GetChat(ctx context.Context, userID string, receiverID string) (*Chat, error) {
 	return uc.repo.GetChat(ctx, userID, receiverID)
+}
+
+func (uc *ChatUseCase) GetChatById(ctx context.Context, id uint) (*Chat, error) {
+	return uc.repo.GetChatById(ctx, id)
 }

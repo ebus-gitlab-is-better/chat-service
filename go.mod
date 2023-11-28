@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.8.0
+	github.com/centrifugal/gocent/v3 v3.2.0
 	github.com/gin-gonic/gin v1.9.1
 	github.com/go-kratos/kratos/v2 v2.7.0
 	github.com/google/wire v0.5.0

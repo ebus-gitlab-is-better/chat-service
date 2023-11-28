@@ -17,6 +17,8 @@ data:
     client_id: "${KC_CLIENT}"
     client_secret: "${KC_SECRET}"
     realm: ${KC_REALM}
+  api_key: ${API_KEY}
+  address_message: ${ADDRESS_HOST}
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
