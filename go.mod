@@ -1,6 +1,6 @@
 module chat-service
 
-go 1.21
+go 1.19
 
 require (
 	github.com/Nerzal/gocloak/v13 v13.8.0
