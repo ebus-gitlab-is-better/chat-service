@@ -21,4 +21,4 @@ WORKDIR /app
 EXPOSE 8000
 EXPOSE 9000
 
-CMD ["./api-gateway", "-conf", "config.yaml"]
+CMD ["./chat-service", "-conf", "config.yaml"]
