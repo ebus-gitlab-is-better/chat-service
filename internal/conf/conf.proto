@@ -41,8 +41,8 @@ message Data {
   }
   message KeyCloak {
     string hostname = 1;
-    string clientID = 2;
-    string clientSecret = 3;
+    string client_id = 2;
+    string client_secret = 3;
     string realm = 4;
   }
   Database database = 1;

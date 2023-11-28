@@ -23,7 +23,7 @@ func (api *KeycloakAPI) CheckToken(accessToken string) (*gocloak.IntroSpectToken
 	return api.client.RetrospectToken(
 		context.TODO(),
 		accessToken,
-		api.conf.Keycloak.ClientID,
+		api.conf.Keycloak.ClientId,
 		api.conf.Keycloak.ClientSecret,
 		api.conf.Keycloak.Realm)
 }
