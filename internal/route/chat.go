@@ -24,7 +24,7 @@ func (r *ChatRoute) Register(router *gin.RouterGroup) {
 	router.GET("/:id/history", r.GetHistory)
 	router.POST("/", r.CreateChat)
 	router.GET("/", r.GetChats)
-	router.POST("/:id/")
+	router.POST("/:id/", r.CreateMessage)
 	// router.DELETE("/chats/:id", )
 }
 
