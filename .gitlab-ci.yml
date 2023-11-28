@@ -24,7 +24,7 @@ deploy-prod:
     - git config --global user.name "GitLab CI/CD"
   script:
     - git clone https://${CI_INFRA_USER}:${CI_INFRA_TOKEN}@gitlab.hyneo.ru/sitronics/infra.git
-    - cd infra/chat/prod
+    - cd infra/chat
     - kustomize edit set image registry.hyneo.ru/sitronics/backend/chat:$CI_COMMIT_SHORT_SHA
     - cat kustomization.yaml
     - git add .

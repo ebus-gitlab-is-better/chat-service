@@ -12,6 +12,8 @@ data:
     password: test
     database: test
     port: "5432"
+  keycloak:
+    
   redis:
     addr: 127.0.0.1:6379
     read_timeout: 0.2s
