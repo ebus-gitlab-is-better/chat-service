@@ -13,10 +13,6 @@ import (
 	"github.com/go-kratos/kratos/v2/transport/http"
 )
 
-func ExtractBearerToken(token string) string {
-	return strings.Replace(token, "Bearer ", "", 1)
-}
-
 func AuthMiddleware(api *data.KeycloakAPI) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		authHeader := c.Request.Header.Get("Authorization")
@@ -54,16 +50,16 @@ func AuthMiddleware(api *data.KeycloakAPI) gin.HandlerFunc {
 			c.Abort()
 			return
 		}
-		user, err := api.GetUserInfo(accessToken)
+		// user, err := api.GetUserInfo(accessToken)
 
-		if err != nil {
-			c.JSON(http1.StatusUnauthorized, &gin.H{
-				"error": err.Error(),
-			})
-			c.Abort()
-			return
-		}
-		c.Set("user", user)
+		// if err != nil {
+		// 	c.JSON(http1.StatusUnauthorized, &gin.H{
+		// 		"error": err.Error(),
+		// 	})
+		// 	c.Abort()
+		// 	return
+		// }
+		// c.Set("user", user)
 		c.Next()
 	}
 }
