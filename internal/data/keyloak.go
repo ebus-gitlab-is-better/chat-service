@@ -23,8 +23,6 @@ func NewKeyCloakAPI(conf *conf.Data, client *gocloak.GoCloak, logger log.Logger)
 }
 
 func (api *KeycloakAPI) CheckToken(accessToken string) (*gocloak.IntroSpectTokenResult, error) {
-	api.logger.Info(api.conf.Keycloak.ClientId)
-	api.logger.Info(api.conf.Keycloak.ClientSecret)
 	return api.client.RetrospectToken(
 		context.TODO(),
 		accessToken,
