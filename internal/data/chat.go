@@ -144,6 +144,7 @@ func (r *chatRepo) GetChat(_ context.Context, userID string, receieverID string)
 		return nil, err
 	}
 	return &biz.Chat{
+		ID:         channelsDB.ID,
 		UserID:     channelsDB.UserID,
 		ReceiverID: channelsDB.ReceiverID,
 	}, nil
@@ -158,6 +159,7 @@ func (r *chatRepo) GetChatById(_ context.Context, id uint) (*biz.Chat, error) {
 		return nil, err
 	}
 	return &biz.Chat{
+		ID:         channelsDB.ID,
 		UserID:     channelsDB.UserID,
 		ReceiverID: channelsDB.ReceiverID,
 	}, nil
