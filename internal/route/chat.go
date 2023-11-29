@@ -221,7 +221,7 @@ type ChatsDTO struct {
 // @Failure	500
 // @Failure	400
 // @Failure	404
-// @Router		/chats/ [get]
+// @Router		/chats/{id}/history [get]
 func (r *ChatRoute) GetHistory(c *gin.Context) {
 	id := c.Param("id")
 	idUint, err := strconv.Atoi(id)
