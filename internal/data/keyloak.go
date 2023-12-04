@@ -37,3 +37,16 @@ func (api *KeycloakAPI) GetUserInfo(accessToken string) (*gocloak.UserInfo, erro
 		accessToken,
 		api.conf.Keycloak.Realm)
 }
+
+func (api *KeycloakAPI) GetUserByID(userId string) (*gocloak.User, error) {
+	token, err := api.client.LoginAdmin(context.TODO(), api.conf.Keycloak.ClientId, api.conf.Keycloak.ClientSecret, api.conf.Keycloak.Realm)
+	if err != nil {
+		panic("Something wrong with the credentials or url")
+	}
+	return api.client.GetUserByID(
+		context.TODO(),
+		token.AccessToken,
+		api.conf.Keycloak.Realm,
+		userId,
+	)
+}
