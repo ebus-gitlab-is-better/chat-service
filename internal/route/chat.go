@@ -170,7 +170,7 @@ type ChatDTO struct {
 // @Tags		chat
 // @Param		id	path	int	true	"Chat ID"	Format(uint64)
 //
-//	@Success	200	{object}	route.ChatDTO
+//	@Success	200	{object}	route.ChatsDTO
 //
 // @Failure	401
 // @Failure	403
