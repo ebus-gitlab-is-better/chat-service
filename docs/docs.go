@@ -45,7 +45,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/internal_route.ChatDTO"
+                            "$ref": "#/definitions/internal_route.ChatsDTO"
                         }
                     },
                     "400": {
@@ -218,6 +218,26 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "chat-service_internal_biz.Chat": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "message": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/chat-service_internal_biz.Message"
+                    }
+                },
+                "receiverID": {
+                    "type": "string"
+                },
+                "userID": {
+                    "type": "string"
+                }
+            }
+        },
         "chat-service_internal_biz.Message": {
             "type": "object",
             "properties": {
@@ -241,23 +261,14 @@ const docTemplate = `{
                 }
             }
         },
-        "internal_route.ChatDTO": {
+        "internal_route.ChatsDTO": {
             "type": "object",
             "properties": {
-                "id": {
-                    "type": "integer"
-                },
-                "message": {
+                "chats": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/chat-service_internal_biz.Message"
+                        "$ref": "#/definitions/chat-service_internal_biz.Chat"
                     }
-                },
-                "receiverID": {
-                    "type": "string"
-                },
-                "userID": {
-                    "type": "string"
                 }
             }
         },

@@ -1,5 +1,18 @@
 basePath: /
 definitions:
+  chat-service_internal_biz.Chat:
+    properties:
+      id:
+        type: integer
+      message:
+        items:
+          $ref: '#/definitions/chat-service_internal_biz.Message'
+        type: array
+      receiverID:
+        type: string
+      userID:
+        type: string
+    type: object
   chat-service_internal_biz.Message:
     properties:
       chatID:
@@ -15,18 +28,12 @@ definitions:
       sentAt:
         type: string
     type: object
-  internal_route.ChatDTO:
+  internal_route.ChatsDTO:
     properties:
-      id:
-        type: integer
-      message:
+      chats:
         items:
-          $ref: '#/definitions/chat-service_internal_biz.Message'
+          $ref: '#/definitions/chat-service_internal_biz.Chat'
         type: array
-      receiverID:
-        type: string
-      userID:
-        type: string
     type: object
   internal_route.CreateChatDTO:
     properties:
@@ -74,7 +81,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/internal_route.ChatDTO'
+            $ref: '#/definitions/internal_route.ChatsDTO'
         "400":
           description: Bad Request
         "401":
