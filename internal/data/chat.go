@@ -99,11 +99,6 @@ func (r *chatRepo) CreateChat(_ context.Context, userID string, receiverID strin
 	if err := r.data.db.Create(&ch).Error; err != nil {
 		return err
 	}
-	ch.UserID = receiverID
-	ch.ReceiverID = userID
-	if err := r.data.db.Create(&ch).Error; err != nil {
-		return err
-	}
 	return nil
 }
 
