@@ -108,7 +108,7 @@ func (r *chatRepo) GetListChat(_ context.Context, userID string) ([]*biz.Chat, e
 	if err := r.data.db.Preload("Message", func(db *gorm.DB) *gorm.DB {
 		return db.Order("messages.sent_at DESC").Limit(1)
 	}).
-		Where(&Chat{UserID: userID}).
+		Where(&Chat{UserID: userID}).Or(&Chat{ReceiverID: userID}).
 		Find(&channelsDB).Error; err != nil {
 		return nil, err
 	}
